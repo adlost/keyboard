@@ -1,6 +1,6 @@
 # GUI for MAG keyboard
 How to use:
-1. Copy project: https://github.com/adlost/keyboard.git
+1. Copy project: git clone https://github.com/adlost/keyboard.git
 2. Run: python3 main.py
 3. Enter IP of your MAG
 
