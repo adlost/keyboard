@@ -1,1 +1,1 @@
-# keyboard
+# GUI for MAG keyboard
