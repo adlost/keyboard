@@ -4,21 +4,31 @@ import ttkthemes
 import paramiko 
 
 
-window = ttkthemes.ThemedTk()
+HOST = input("MAG_IP: ")
+USER = 'root'
+SECRET = '930920'
+PORT = 22
 
+
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect(hostname=HOST, username=USER, password=SECRET, port=PORT)
+
+
+
+window = ttkthemes.ThemedTk()
 
 window.get_themes()
 window.set_theme('radiance')
 
-window.title('GUI for key emuletion')
+p1 = PhotoImage(file = 'keyboard.png')
+ 
+# Setting icon of master window
+window.iconphoto(False, p1)
+
+
+window.title('Keyboard for MAG')
 window.resizable(False, False)
-
-
-
-varRow = 1
-varColumn = 0
-titleLabel= Label(window, text='On Screan Keyboard', font=('arial', 20, 'bold'))
-titleLabel.grid(row=0, column=0, columnspan=15)
 
 
 buttons = ['0',    '1',    '2',   '3',     '4',          '5',    
@@ -28,6 +38,19 @@ buttons = ['0',    '1',    '2',   '3',     '4',          '5',
 		   'ch+',  'menu', 'down',  'info',  'play/pause', 'blue',
 		   'ch-',  'mute', 'EPG', 'tv',    'stop',       'power off',#'Screen resize',
 		   ]
+
+
+varRow = 1
+varCol = 0
+
+for button in buttons:
+	command= lambda x=button: select(map_kb.get(x))
+	ttk.Button(window, text=button, width=10, command=command).grid(row=varRow, column=varCol)
+	varCol+=1
+	if varCol>5:
+		varCol=0
+		varRow+=1
+
 
 map_kb = {
 'Vol-':'-kqt 0x01000070 -kqt 0x',
@@ -69,6 +92,7 @@ map_kb = {
 'tv':'-kqt 0x01000039'
 }
 
+
 map_event={
 'KP_0':'-kqt 48',
 'KP_1':'-kqt 49',
@@ -98,7 +122,7 @@ map_event={
 'F2': '-kqt 0x01000031',
 'F3':'-kqt 0x01000032',
 'F4':'-kqt 0x01000033',
-'F5':'-kqt 0x01000034'
+'F5':'-kqt 0x01000034',
 'Left':'-kqt 0x01000012',
 'Right':'-kqt 0x01000014',
 'Up':'-kqt 0x01000013',
@@ -106,7 +130,7 @@ map_event={
 'KP_Subtract':'-kqt 0x01000070 -kqt 0x',
 'KP_Add':'-kqt 0x01000072 -kqt 0x2b',
 'KP_Enter':'-kqt 0x01000004',
-'Return':'-kqt 0x01000004',
+'Return':'-kqt 0x01000005',
 'Home':'-kqt 0x0100003a',
 'Pause':'-kqt 82 -a',
 'w':'-kqt 0x01000001',
@@ -114,30 +138,14 @@ map_event={
 }
 
 
-
-for button in buttons:
-	command= lambda x=button: select(map_kb.get(x))
-	ttk.Button(window, text=button, width=10, command=command).grid(row=varRow, column=varColumn)
-	varColumn+=1
-	if varColumn>5:
-		varColumn=0
-		varRow+=1
-
-
 def select(btn_code):
-	host = ''
-	user = 'root'
-	secret = '930920'
-	port = 22
-	client = paramiko.SSHClient()
-	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client.connect(hostname=host, username=user, password=secret, port=port)
 	stdin, stdout, stderr = client.exec_command("/usr/local/share/app/bin/sendqtevent {code}".format(code=btn_code))
 	data = stdout.read() + stderr.read()
 
 
 def com(event):
 	select(map_event.get(event.keysym))
+
 
 
 window.bind("<Key>", com)
