@@ -1,5 +1,7 @@
-![image](https://user-images.githubusercontent.com/26092321/118629139-f918c800-b7d5-11eb-89b9-5b2c96cd3db0.png)
 # GUI for MAG keyboard
+
+![image](https://user-images.githubusercontent.com/26092321/118629139-f918c800-b7d5-11eb-89b9-5b2c96cd3db0.png)
+
 How to use:
 1. Copy project: git clone https://github.com/adlost/keyboard.git
 2. Set up environment
